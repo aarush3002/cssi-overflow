@@ -7,15 +7,13 @@ function createPost() {
   var title = document.querySelector("#title").value;
   var content = document.querySelector("#content").value;
   
-  // TODO: Enable the line below once we have login setup
-  //firebase.database().ref(`users/${googleUser.uid}`).push({
-  firebase.database().ref(`test`).push({
+  firebase.database().ref(`users/${googleUser.uid}`).push({
     title: title,
     content: content,
     timestamp: Date.now()
   });
 
-  //window.location = 'index.html'; <!-- Go to 'my posts' page -->
+  //window.location = 'myPosts.html'; TODO: Go to 'my posts' page
 
   document.querySelector("#progressBar").classList.add("hidden");
 }
@@ -25,7 +23,7 @@ window.onload = (event) => {
     if (user) {
       googleUser = user;
     } else {
-      //window.location = 'index.html'; // 'index.html' will be the login page
+      window.location = 'index.html'; // 'index.html' is the login page
     }
   });
 };

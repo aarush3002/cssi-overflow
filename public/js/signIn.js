@@ -14,11 +14,10 @@ const signIn = () => {
 
             console.log(user.uid);
             userId = user.uid;
-            window.location = 'Homepage.html'; 
+            window.location = 'homePage.html'; 
         })
         .catch(error => {
             //Something bad happened :(
             console.log(error);
         });
 };
-
