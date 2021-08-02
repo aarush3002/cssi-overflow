@@ -7,11 +7,12 @@
     <script defer src="/__/firebase/8.3.1/firebase-auth.js"></script>
     <script defer src="/__/firebase/8.3.1/firebase-database.js"></script>
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="/js/viewPost.js"></script>
 
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Post</title>
+    <title>Home</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
@@ -33,7 +34,7 @@
         <a class="navbar-item" href="#">
           <!-- TODO: Replace bulma image below with logo of our website -->
           <img
-            src="CSSIoverflow.png"
+            src="https://bulma.io/images/bulma-logo.png"
             width="112"
             height="28"
           />
@@ -43,15 +44,15 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a href="homePage.html" class="button is-primary">
+              <a class="button is-light">
+                <!-- TODO: Should go to home page-->
                 <strong>Home</strong>
               </a>
               <a class="button is-light">
                 <!-- TODO: Should go to my posts page -->
                 My Posts
               </a>
-              <a href="#" class="button is-light">
-                <!-- No action taken if pressed, since user is already on create post page-->
+              <a href="CreatePost.html" class="button is-light">
                 Create Post
               </a>
             </div>
@@ -59,35 +60,11 @@
         </div>
       </div>
     </nav>
+
+    <h2 id="postTitle">Title: </h2>
+    <h2 id="postContent">Content: </h2>
+    <div id="#comments">
+    </div>
     
-    <progress id="progressBar" class="hidden progress is-small is-info m-3" max="100">5%</progress>
-
-    <!-- Post title -->
-    <div class="control m-3">
-      <input id="title" class="input" type="text" placeholder="Title" />
-    </div>
-
-    <!-- Post content -->
-    <div class="field m-3">
-      <div class="control">
-        <textarea
-          id="content"
-          class="textarea"
-          placeholder="Content"
-        ></textarea>
-      </div>
-    </div>
-
-    <!-- Buttons -->
-    <div class="buttons m-3">
-      <!-- Cancecls takes user back to the previous page they were on-->
-      <button onclick="history.back()" class="button is-danger is-light button-focus-box-shadow-grey">
-        Cancel
-      </button>
-      <button onclick="createPost()" class="button is-primary is-light  button-focus-box-shadow-info">
-        Post
-      </button>
-    </div>
   </body>
-  <script src="/js/CreatePostScript.js"></script>
 </html>
