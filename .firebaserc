@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "cssi-overflow"
+    "default": "cssi-overflow",
+    "defauly": "cssi-overflow"
   }
 }
