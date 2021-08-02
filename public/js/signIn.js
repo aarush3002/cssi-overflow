@@ -20,6 +20,5 @@ const signIn = () => {
             //Something bad happened :(
             console.log(error);
         });
-
 };
 
