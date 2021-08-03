@@ -1,10 +1,13 @@
+let googleUser;
+//export {userID, postID};
+
 console.log("Home page script loaded");
 function creationTime(epoch) {
     const dateObject = new Date(epoch);
     return dateObject.toLocaleString();
 }
 
-function displayPost(post) {
+function displayPost(post, postKey, userKey) {
     console.log("Displaying post");
     console.log(post);
     var title = post["title"];
@@ -25,6 +28,7 @@ function displayPost(post) {
                 <br>
                 <time>${time}</time>
             </div>
+            <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
     `;
@@ -34,6 +38,7 @@ window.onload = (event) => {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
         googleUser = user;
+        userID = user.uid;
         getNotes(user.uid);
         } else {
         window.location = 'index.html'; // 'index.html' is the login page
@@ -58,10 +63,16 @@ const getNotes = (userId) => {
             const post = userData[postKey];
             console.log("post");
             console.log(post);
-            postsGUI += displayPost(post)
+            postsGUI += displayPost(post, postKey, userKey)
         }
     }
     // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#app').innerHTML = postsGUI;
     });
+};
+
+const viewPost = (postID, userID) => {
+    document.cookie = `userID=${userID};`
+    document.cookie = `postID=${postID};`
+    window.location = "viewPost.html";
 };
