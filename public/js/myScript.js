@@ -1,4 +1,5 @@
 let googleUser;
+let userID;
 
 console.log("My Posts page script loaded");
 function creationTime(epoch) {
@@ -6,7 +7,7 @@ function creationTime(epoch) {
     return dateObject.toLocaleString();
 }
 
-function displayMyPost(post,postKey) {
+function displayMyPost(post,postKey, userKey) {
     console.log("Displaying post");
     console.log(post);
     var title = post["title"];
@@ -30,6 +31,7 @@ function displayMyPost(post,postKey) {
                 <br>
                 <time>${time}</time>
             </div>
+            <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
     `;
@@ -38,8 +40,9 @@ function displayMyPost(post,postKey) {
 window.onload = (event) => {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-        googleUser = user;
-        getNotes(user.uid);
+            googleUser = user;
+            userID = user.uid;
+            getNotes(user.uid);
         } else {
         window.location = 'index.html'; // 'index.html' is the login page
         }
@@ -60,7 +63,7 @@ const getNotes = (userId) => {
         const post = data[postKey];
         console.log("user data");
         console.log(post);
-            postsGUI += displayMyPost(post, postKey)
+            postsGUI += displayMyPost(post, postKey, userId)
     }
     // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#app').innerHTML = postsGUI;
@@ -68,6 +71,18 @@ const getNotes = (userId) => {
 };
 
 function deleteCard(postKey){
-    console.log("deleting post");
-    firebase.database().ref(`users/${googleUser.uid}/${postKey}`).remove();
+    if (confirm("Are you sure you want to delete this post?"))
+    {
+        console.log("deleting post");
+        firebase.database().ref(`users/${googleUser.uid}/${postKey}`).remove();
+    }
+    else {
+        return 0;
+    }
 }
+
+const viewPost = (postID, userID) => {
+    document.cookie = `userID=${userID};`
+    document.cookie = `postID=${postID};`
+    window.location = "viewPost.html";
+};
