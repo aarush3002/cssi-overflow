@@ -5,7 +5,6 @@ const signIn = () => {
     firebase.auth()
         .signInWithPopup(provider)
         .then(result => {
-            //Do something with the result
             console.log(`result is ${result}`);
             const credential = result.credential;
             const token = credential.accessToken;

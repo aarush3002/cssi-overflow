@@ -10,13 +10,14 @@ function displayPost(post) {
     var title = post["title"];
     var content = post["content"].substring(0, 100) + "...";
     const time = creationTime(post.timestamp);
+    
     console.log("Time: ");
     console.log(time);
     return `
     <div class="card m-3">
         <header class="card-header">
             <p class="card-header-title">
-                ${title}
+                ${title} , ${post.canDelete}
             </p>
         </header>
         <div class="card-content">
