@@ -1,10 +1,12 @@
-console.log("Home page script loaded");
+let googleUser;
+
+console.log("My Posts page script loaded");
 function creationTime(epoch) {
     const dateObject = new Date(epoch);
     return dateObject.toLocaleString();
 }
 
-function displayPost(post) {
+function displayMyPost(post,postKey) {
     console.log("Displaying post");
     console.log(post);
     var title = post["title"];
@@ -18,6 +20,9 @@ function displayPost(post) {
             <p class="card-header-title">
                 ${title}
             </p>
+            <button class="delete" 
+                    onclick = "deleteCard('${postKey}')">
+            </button>
         </header>
         <div class="card-content">
             <div class="content">
@@ -50,18 +55,19 @@ const getNotes = (userId) => {
     let postsGUI = ``;
     console.log("data");
     console.log(data);
-    for(const userKey in data) {
-        const userData = data[userKey];
+   
+    for(const postKey in data) {
+        const post = data[postKey];
         console.log("user data");
-        console.log(userData);
-        for(const postKey in userData) {
-            const post = userData[postKey];
-            console.log("post");
-            console.log(post);
-            postsGUI += displayPost(post)
-        }
+        console.log(post);
+            postsGUI += displayMyPost(post, postKey)
     }
     // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#app').innerHTML = postsGUI;
     });
 };
+
+function deleteCard(postKey){
+    console.log("deleting post");
+    firebase.database().ref(`users/${googleUser.uid}/${postKey}`).remove();
+}
