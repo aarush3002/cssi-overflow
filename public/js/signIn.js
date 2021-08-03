@@ -14,6 +14,7 @@ const signIn = () => {
 
             console.log(user.uid);
             userId = user.uid;
+            document.cookie = `curr_userID=${userId}`;
             window.location = 'homePage.html'; 
         })
         .catch(error => {
