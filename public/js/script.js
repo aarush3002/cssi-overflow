@@ -1,5 +1,4 @@
 let googleUser;
-let userID, postID;
 //export {userID, postID};
 
 console.log("Home page script loaded");
@@ -8,8 +7,7 @@ function creationTime(epoch) {
     return dateObject.toLocaleString();
 }
 
-function displayPost(post, postKey) {
-    postID = postKey;
+function displayPost(post, postKey, userKey) {
     console.log("Displaying post");
     console.log(post);
     var title = post["title"];
@@ -30,7 +28,7 @@ function displayPost(post, postKey) {
                 <br>
                 <time>${time}</time>
             </div>
-            <button class="is-primary" onclick="viewPost()">View Post</button>
+            <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
     `;
@@ -65,7 +63,7 @@ const getNotes = (userId) => {
             const post = userData[postKey];
             console.log("post");
             console.log(post);
-            postsGUI += displayPost(post, postKey)
+            postsGUI += displayPost(post, postKey, userKey)
         }
     }
     // Inject our string of HTML into our viewNotes.html page
@@ -73,7 +71,7 @@ const getNotes = (userId) => {
     });
 };
 
-const viewPost = () => {
+const viewPost = (postID, userID) => {
     document.cookie = `userID=${userID};`
     document.cookie = `postID=${postID};`
     window.location = "viewPost.html";
