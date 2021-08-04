@@ -36,9 +36,7 @@ const getComments = () => {
     let commentsGUI = ``;
     for(const commentKey in comments) {
         console.log(commentKey);
-        const commenterName = comments[commentKey].commentUser;
-        const commentDetails = comments[commentKey].commentText;
-        commentsGUI += renderComment(commenterName, commentDetails);
+        commentsGUI += renderComment(comments[commentKey]);
     }
     // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#comments').innerHTML = commentsGUI;
@@ -50,6 +48,7 @@ function displayPost(post, postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var content = post["content"];
+    const time = creationTime(post.timestamp);
     if (getCook('curr_userID') === getCook('userID'))
     {
         return `
@@ -62,6 +61,9 @@ function displayPost(post, postKey, userKey) {
             <div class="card-content">
                 <div class="content">
                     ${content}
+                    <br>
+                    <br>
+                    <time><em>Post created on: ${time}</em></time>
                 </div>
                 <button class="is-primary" onclick="addComment()">Comment</button>                
                 <button class="is-primary" onclick="editPost()">Edit Post</button>
@@ -80,6 +82,9 @@ function displayPost(post, postKey, userKey) {
             <div class="card-content">
                 <div class="content">
                     ${content}
+                    <br>
+                    <br>
+                    <time><em>Post created on: ${time}</em></time>
                 </div>
                 <button class="is-primary" onclick="addComment()">Comment</button>
             </div>
@@ -156,7 +161,8 @@ const saveComment = () => {
     const commentContent = document.querySelector("#commentInput").value;
     firebase.database().ref(`users/${post_userID}/${post_ID}/comments`).push({
         commentUser: userObj.displayName,
-        commentText: commentContent
+        commentText: commentContent,
+        timestamp: Date.now()
     });
     //how to push comments to database???
     //comment ID --> how to add all this at once?
@@ -166,13 +172,20 @@ const saveComment = () => {
     closeCommentModal();
 }
 
-const renderComment = (username, content) => {
+const renderComment = (comment) => {
+    const content = comment.commentText;
+    const username = comment.commentUser;
+    const time = creationTime(comment.timestamp);
     return `
+    <header class="card-header">
+    </header>
     <div class="card m-3">
         <div class="card-content">
             <div class="content">
                 ${content}
             </div>
+            <br>
+            <time><em>Commented on: ${time}</em></time>
         </div>
         <footer class="card-footer">
             <p class="card-footer-item">
@@ -180,4 +193,9 @@ const renderComment = (username, content) => {
             </p>
         </header>
     </div>`
+}
+
+function creationTime(epoch) {
+    const dateObject = new Date(epoch);
+    return dateObject.toLocaleString();
 }
