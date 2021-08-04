@@ -36,7 +36,7 @@ const getComments = () => {
     let commentsGUI = ``;
     for(const commentKey in comments) {
         console.log(commentKey);
-        commentsGUI += renderComment(comments[commentKey]);
+        commentsGUI += renderComment(commentKey, comments[commentKey]);
     }
     // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#comments').innerHTML = commentsGUI;
@@ -172,27 +172,51 @@ const saveComment = () => {
     closeCommentModal();
 }
 
-const renderComment = (comment) => {
+const renderComment = (commentKey, comment) => {
     const content = comment.commentText;
     const username = comment.commentUser;
     const time = creationTime(comment.timestamp);
-    return `
-    <header class="card-header">
-    </header>
-    <div class="card m-3">
-        <div class="card-content">
-            <div class="content">
-                ${content}
-            </div>
-            <br>
-            <time><em>Commented on: ${time}</em></time>
-        </div>
-        <footer class="card-footer">
-            <p class="card-footer-item">
-                ${username}
-            </p>
+    console.log(userObj.displayName);
+    console.log(username);
+    if (userObj.displayName === username) {
+        return `
+        <header class="card-header">
+            <button class="delete" 
+                onclick = "deleteComment('${commentKey}')">
+            </button>
         </header>
-    </div>`
+        <div class="card m-3">
+            <div class="card-content">
+                <div class="content">
+                    ${content}
+                </div>
+                <br>
+                <time><em>Commented on: ${time}</em></time>
+            </div>
+            <footer class="card-footer">
+                <p class="card-footer-item">
+                    ${username}
+                </p>
+                <button class="is-primary" onclick="editComment()">Edit</button>
+            </footer>
+        </div>`
+    } else {
+        return `
+        <div class="card m-3">
+            <div class="card-content">
+                <div class="content">
+                    ${content}
+                </div>
+                <br>
+                <time><em>Commented on: ${time}</em></time>
+            </div>
+            <footer class="card-footer">
+                <p class="card-footer-item">
+                    ${username}
+                </p>
+            </footer>
+        </div>`
+    }
 }
 
 function creationTime(epoch) {
