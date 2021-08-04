@@ -12,6 +12,14 @@ function displayPost(post, postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var content = post["content"].substring(0, 100) + "...";
+    var tag = ``;
+    if(post.tags){
+        for(let i = 0; i<post.tags.length; i++){
+            tag += `<span class="tag is-danger">${post.tags[i]}</span>`;
+        }
+        
+    }
+    
     const time = creationTime(post.timestamp);
     
     console.log("Time: ");
@@ -20,7 +28,7 @@ function displayPost(post, postKey, userKey) {
     <div class="card m-3">
         <header class="card-header">
             <p class="card-header-title">
-                ${title} , ${post.canDelete}
+                ${title}
             </p>
         </header>
         <div class="card-content">
@@ -29,6 +37,7 @@ function displayPost(post, postKey, userKey) {
                 <br>
                 <time>${time}</time>
             </div>
+            <div id = "tag-container">${tag}</div>
             <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
