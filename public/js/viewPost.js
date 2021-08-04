@@ -4,29 +4,55 @@
 const curr_userID = getCook('curr_userID');
 const post_userID = getCook('userID');
 const post_ID = getCook('postID');
+let postObj;
 
 let userObj;
 
+function upvotePost() {
+    var post = postObj;
+    console.log("Upvoting post");
+    console.log(post);
+    if (post.upvoteList == null || !(post.upvoteList.includes(userObj.uid))) {
+        console.log("User eligible to upvote");
+        if (post.upvote == null) {
+            post.upvote = 1;
+            post.upvoteList = [userObj.uid];
+        } else {
+            post.upvote += 1;
+            post.upvoteList.push(userObj.uid);
+        }
+        
+        firebase.database().ref(`users/${post_userID}/${post_ID}`)
+        .update({
+            upvote: post.upvote,
+            upvoteList: post.upvoteList
+        });
+    }
+
+}
+
 window.onload = () => {
-    const postRef = firebase.database().ref(`users/${post_userID}/${post_ID}`);
-    console.log(postRef);
-    postRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        document.querySelector("#app").innerHTML = displayPost(data, post_ID, post_userID);
-        document.querySelector("#postTitle").innerHTML = data["title"];
-    });
+    
 
     firebase.auth()
         .onAuthStateChanged(user => {
             if (user) {
                 userObj = user;
+                const postRef = firebase.database().ref(`users/${post_userID}/${post_ID}`);
+                console.log(postRef);
+                postRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    postObj = data;
+                    document.querySelector("#app").innerHTML = displayPost(data, post_ID, post_userID);
+                    document.querySelector("#postTitle").innerHTML = data["title"];
+                });
+                getComments();
             }
             else {
                 window.location = 'index.html';
             }
         });
         
-    getComments();
 };
 
 const getComments = () => {
@@ -49,6 +75,10 @@ function displayPost(post, postKey, userKey) {
     console.log("Displaying post");
     console.log(post);
     var title = post["title"];
+    var upvote = post["upvote"];
+    if (upvote == null) {
+        upvote = 0;
+    }
     var content = post["content"];
     const time = creationTime(post.timestamp);
     if (getCook('curr_userID') === getCook('userID'))
@@ -56,7 +86,7 @@ function displayPost(post, postKey, userKey) {
         return `
         <div class="columns">
             <div class="column"></div>
-            <div class="column is-four-fifths">
+            <div class="column is-four-fifths">            
                 <div class="card m-3"> 
                     <div class="card-content">
                         <div class="content">
@@ -79,24 +109,30 @@ function displayPost(post, postKey, userKey) {
     else {
         return `
         <div class="columns">
-            <div class="column"></div>
-            <div class="column is-four-fifths">
-                <div class="card m-3">
-                    <div class="card-content">
-                        <div class="content">
-                            ${content}
-                            <br>
-                            <br>
-                            <time><em>Post created on: ${time}</em></time>
-                        </div>
-                    </div>    
-                    <footer class="card-footer">
-                        <a href="#" onclick="addComment()" class="card-footer-item">Comment</a>
-                    </footer>
-                </div>
-            </div>
-            <div class="column"></div>
-        </div>
+	<div class="column"></div>
+    <div class="column is-four-fifths">
+    
+				<div class="card m-3">
+		<div class="columns">
+            <div class="column is-1 has-text-centered"> 
+            <img onclick="upvotePost()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU"/>
+				<p>${upvote}</p>
+			</div>
+			<div class="column">
+					<div class="card-content">
+						<div class="content"> ${content}
+							<br>
+							<br>
+							<time><em>Post created on: ${time}</em></time>
+						</div>
+					</div>
+					<footer class="card-footer"> <a href="#" onclick="addComment()" class="card-footer-item">Comment</a> </footer>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column"></div>
+</div>
         `;
     }
 }
@@ -141,7 +177,7 @@ const saveEditedPost = () => {
     const newContent = document.querySelector("#editContentInput").value;
 
     firebase.database().ref(`users/${post_userID}/${post_ID}`)
-        .set({
+        .update({
             title: newTitle,
             content: newContent
         });
