@@ -17,7 +17,7 @@ function createPost() {
             title: title,
             content: content,
             timestamp: Date.now(),
-            tags: tagArray
+            tags: tagArray,
         }).then(() => {
             console.log("change page");
             window.location = 'myPosts.html';

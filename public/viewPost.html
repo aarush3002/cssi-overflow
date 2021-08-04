@@ -24,6 +24,7 @@
   </head>
   
   <body>
+    <!--edit post modal-->
     <div id="editPostModal" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -36,6 +37,22 @@
                     Save changes
                 </button>
                 <button class="button" onclick="closeEditModal()">Cancel</button>
+            </footer>
+        </div>
+    </div>
+
+    <!--comment Modal-->
+    <div id="commentModal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <input class="input is-normal" id="commentInput" type="text">
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" onclick="saveComment()">
+                    Save changes
+                </button>
+                <button class="button" onclick="closeCommentModal()">Cancel</button>
             </footer>
         </div>
     </div>
@@ -71,6 +88,11 @@
       </div>
     </nav>
     <section id="app">
+
+    </section>
+    <br>
+    <br>
+    <section id="comments">
 
     </section>
   </body>

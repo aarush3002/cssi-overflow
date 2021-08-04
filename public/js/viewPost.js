@@ -5,12 +5,43 @@ const curr_userID = getCook('curr_userID');
 const post_userID = getCook('userID');
 const post_ID = getCook('postID');
 
+let userObj;
+
 window.onload = () => {
     const postRef = firebase.database().ref(`users/${post_userID}/${post_ID}`);
     console.log(postRef);
     postRef.on('value', (snapshot) => {
         const data = snapshot.val();
         document.querySelector("#app").innerHTML = displayPost(data, post_ID, post_userID);
+    });
+
+    firebase.auth()
+        .onAuthStateChanged(user => {
+            if (user) {
+                userObj = user;
+            }
+            else {
+                window.location = 'index.html';
+            }
+        });
+    getComments();
+};
+
+const getComments = () => {
+  const postRef = firebase.database().ref(`users/${post_userID}/${post_ID}/comments`)
+  console.log("Getting comments");
+  postRef.on('value', (snapshot) => {
+    console.log("get ref to database");
+    const comments = snapshot.val();
+    let commentsGUI = ``;
+    for(const commentKey in comments) {
+        console.log(commentKey);
+        const commenterName = comments[commentKey].commentUser;
+        const commentDetails = comments[commentKey].commentText;
+        commentsGUI += renderComment(commenterName, commentDetails);
+    }
+    // Inject our string of HTML into our viewNotes.html page
+    document.querySelector('#comments').innerHTML = commentsGUI;
     });
 };
 
@@ -32,6 +63,7 @@ function displayPost(post, postKey, userKey) {
                 <div class="content">
                     ${content}
                 </div>
+                <button class="is-primary" onclick="addComment()">Comment</button>                
                 <button class="is-primary" onclick="editPost()">Edit Post</button>
             </div>
         </div>
@@ -49,6 +81,7 @@ function displayPost(post, postKey, userKey) {
                 <div class="content">
                     ${content}
                 </div>
+                <button class="is-primary" onclick="addComment()">Comment</button>
             </div>
         </div>
         `;
@@ -99,5 +132,52 @@ const saveEditedPost = () => {
             title: newTitle,
             content: newContent
         });
+    getComments();
     closeEditModal();
+}
+
+const addComment = () => {
+    const commentModal = document.querySelector('#commentModal');
+    commentModal.classList.toggle('is-active');
+    //set comment modal to active
+    //let user make comment (or cancel)
+    //save comment in database, storing the following attributes:
+        //comment user obj (which has displayName and uid attributes)
+        //comment content
+    //render the newly made comment on the webpage by calling renderComments() function
+}
+
+const closeCommentModal = () => {
+    const commentModal = document.querySelector("#commentModal");
+    commentModal.classList.toggle("is-active");
+}
+
+const saveComment = () => {
+    const commentContent = document.querySelector("#commentInput").value;
+    firebase.database().ref(`users/${post_userID}/${post_ID}/comments`).push({
+        commentUser: userObj.displayName,
+        commentText: commentContent
+    });
+    //how to push comments to database???
+    //comment ID --> how to add all this at once?
+        //commenter user ID (doable)
+        //comment content (doable)
+    
+    closeCommentModal();
+}
+
+const renderComment = (username, content) => {
+    return `
+    <div class="card m-3">
+        <div class="card-content">
+            <div class="content">
+                ${content}
+            </div>
+        </div>
+        <footer class="card-footer">
+            <p class="card-footer-item">
+                ${username}
+            </p>
+        </header>
+    </div>`
 }
