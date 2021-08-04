@@ -38,9 +38,7 @@ const getComments = () => {
     let commentsGUI = ``;
     for(const commentKey in comments) {
         console.log(commentKey);
-        const commenterName = comments[commentKey].commentUser;
-        const commentDetails = comments[commentKey].commentText;
-        commentsGUI += renderComment(commenterName, commentDetails);
+        commentsGUI += renderComment(commentKey, comments[commentKey]);
     }
     // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#comments').innerHTML = commentsGUI;
@@ -52,6 +50,7 @@ function displayPost(post, postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var content = post["content"];
+    const time = creationTime(post.timestamp);
     if (getCook('curr_userID') === getCook('userID'))
     {
         return `
@@ -62,6 +61,9 @@ function displayPost(post, postKey, userKey) {
                     <div class="card-content">
                         <div class="content">
                             ${content}
+                          <br>
+                          <br>
+                          <time><em>Post created on: ${time}</em></time>
                         </div>
                     </div>
                     <footer class="card-footer">
@@ -83,6 +85,9 @@ function displayPost(post, postKey, userKey) {
                     <div class="card-content">
                         <div class="content">
                             ${content}
+                            <br>
+                            <br>
+                            <time><em>Post created on: ${time}</em></time>
                         </div>
                     </div>    
                     <footer class="card-footer">
@@ -164,7 +169,8 @@ const saveComment = () => {
     const commentContent = document.querySelector("#commentInput").value;
     firebase.database().ref(`users/${post_userID}/${post_ID}/comments`).push({
         commentUser: userObj.displayName,
-        commentText: commentContent
+        commentText: commentContent,
+        timestamp: Date.now()
     });
     //how to push comments to database???
     //comment ID --> how to add all this at once?
@@ -174,24 +180,67 @@ const saveComment = () => {
     closeCommentModal();
 }
 
-const renderComment = (username, content) => {
-    return `
-    <div class="columns">
+const renderComment = (commentKey, comment) => {
+    const content = comment.commentText;
+    const username = comment.commentUser;
+    const time = creationTime(comment.timestamp);
+    console.log(userObj.displayName);
+    console.log(username);
+    if (userObj.displayName === username) {
+        return `
+        <div class="columns">
+          <div class="column"></div>
+            <div class="column is-four-fifths">
+              <div class="card m-3">
+                  <header class="card-header">
+                      <button class="delete" 
+                          onclick = "deleteComment('${commentKey}')">
+                      </button>
+                  </header>
+
+                  <div class="card-content">
+                      <div class="content">
+                          ${content}
+                      </div>
+                      <br>
+                      <time><em>Commented on: ${time}</em></time>
+                  </div>
+                  <footer class="card-footer">
+                      <p class="card-footer-item">
+                          ${username}
+                      </p>
+                      <button class="is-primary" onclick="editComment()">Edit</button>
+                  </footer>
+              </div>
+          </div>
+          <div class="column"></div>
+        </div>`
+    } else {
+        return `
+        <div class="columns">
+          <div class="column"></div>
+          <div class="column is-four-fifths">
+    
+          <div class="card m-3">
+              <div class="card-content">
+                  <div class="content">
+                      ${content}
+                  </div>
+                  <br>
+                  <time><em>Commented on: ${time}</em></time>
+              </div>
+              <footer class="card-footer">
+                  <p class="card-footer-item">
+                      ${username}
+                  </p>
+              </footer>
+          </div>
         <div class="column"></div>
-        <div class="column is-four-fifths">
-            <div class="card m-3">
-                <div class="card-content">
-                    <div class="content">
-                        ${content}
-                    </div>
-                </div>
-                <footer class="card-footer">
-                    <p class="card-footer-item">
-                        ${username}
-                    </p>
-                </footer>
-            </div>
-        </div>
-        <div class="column"></div>
-    </div>`
+      </div>`;
+    }
+}
+
+function creationTime(epoch) {
+    const dateObject = new Date(epoch);
+    return dateObject.toLocaleString();
 }

@@ -35,7 +35,8 @@ function displayPost(post, postKey, userKey) {
             <div class="content">
                 ${content}
                 <br>
-                <time>${time}</time>
+                <br>
+                <time><em>Post created on: ${time}</em></time>
             </div>
             <div id = "tag-container">${tag}</div>
         </div>

@@ -30,14 +30,15 @@ function displayMyPost(post,postKey, userKey) {
                 ${title}
             </p>
             <button class="delete" 
-                    onclick = "deleteCard('${postKey}')">
+                onclick = "deleteCard('${postKey}')">
             </button>
         </header>
         <div class="card-content">
             <div class="content">
                 ${content}
                 <br>
-                <time>${time}</time>
+                <br>
+                <time><em>Post created on: ${time}</em></time>
             </div>
             <div id = "tag-container">${tag}</div>
         </div>
