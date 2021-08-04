@@ -189,54 +189,43 @@ const renderComment = (commentKey, comment) => {
     if (userObj.displayName === username) {
         return `
         <div class="columns">
-          <div class="column"></div>
+            <div class="column"></div>
             <div class="column is-four-fifths">
-              <div class="card m-3">
-                  <header class="card-header">
-                      <button class="delete" 
-                          onclick = "deleteComment('${commentKey}')">
-                      </button>
-                  </header>
-
-                  <div class="card-content">
-                      <div class="content">
-                          ${content}
-                      </div>
-                      <br>
-                      <time><em>Commented on: ${time}</em></time>
-                  </div>
-                  <footer class="card-footer">
-                      <p class="card-footer-item">
-                          ${username}
-                      </p>
-                      <button class="is-primary" onclick="editComment()">Edit</button>
-                  </footer>
-              </div>
-          </div>
-          <div class="column"></div>
+                <div class="card m-3">
+                    <header class="card-header">
+                        <button class="delete" onclick="deleteComment('${commentKey}')"> </button>
+                    </header>
+                    <div class="card-content">
+                        <div class="content"> ${content} </div>
+                        <br>
+                        <time><em>Commented on: ${time}</em></time>
+                    </div>
+                    <footer class="card-footer">
+                        <p class="card-footer-item"> ${username} </p>
+                        <button class="is-primary" onclick="editComment()">Edit</button>
+                    </footer>
+                </div>
+            </div>
+            <div class="column"></div>
         </div>`
     } else {
         return `
         <div class="columns">
-          <div class="column"></div>
-          <div class="column is-four-fifths">
-    
-          <div class="card m-3">
-              <div class="card-content">
-                  <div class="content">
-                      ${content}
-                  </div>
-                  <br>
-                  <time><em>Commented on: ${time}</em></time>
-              </div>
-              <footer class="card-footer">
-                  <p class="card-footer-item">
-                      ${username}
-                  </p>
-              </footer>
-          </div>
-        <div class="column"></div>
-      </div>`;
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <div class="card m-3">
+                    <div class="card-content">
+                        <div class="content"> ${content} </div>
+                        <br>
+                        <time><em>Commented on: ${time}</em></time>
+                    </div>
+                    <footer class="card-footer">
+                        <p class="card-footer-item"> ${username} </p>
+                    </footer>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>`;
     }
 }
 
