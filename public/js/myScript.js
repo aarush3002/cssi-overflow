@@ -12,6 +12,14 @@ function displayMyPost(post,postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var content = post["content"].substring(0, 100) + "...";
+    var tag = ``;
+    if(post.tags){
+        for(let i = 0; i<post.tags.length; i++){
+            tag += `<span class="tag is-danger">${post.tags[i]}</span>`;
+        }
+        
+    }
+
     const time = creationTime(post.timestamp);
     console.log("Time: ");
     console.log(time);
@@ -31,6 +39,7 @@ function displayMyPost(post,postKey, userKey) {
                 <br>
                 <time>${time}</time>
             </div>
+            <div id = "tag-container">${tag}</div>
             <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
