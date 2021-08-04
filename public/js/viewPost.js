@@ -1,11 +1,11 @@
 //import {getIDs} from './script.js';
 //const scriptModule = require("./script.js");
 //import {userID, postID} from './script.js';
+const curr_userID = getCook('curr_userID');
+const post_userID = getCook('userID');
+const post_ID = getCook('postID');
 
 window.onload = () => {
-    const curr_userID = getCook('curr_userID');
-    const post_userID = getCook('userID');
-    const post_ID = getCook('postID');
     const postRef = firebase.database().ref(`users/${post_userID}/${post_ID}`);
     console.log(postRef);
     postRef.on('value', (snapshot) => {
@@ -19,20 +19,40 @@ function displayPost(post, postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var content = post["content"];
-    return `
-    <div class="card m-3">
-        <header class="card-header">
-            <p class="card-header-title">
-                ${title}
-            </p>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                ${content}
+    if (getCook('curr_userID') === getCook('userID'))
+    {
+        return `
+        <div class="card m-3">
+            <header class="card-header">
+                <p class="card-header-title">
+                    ${title}
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="content">
+                    ${content}
+                </div>
+                <button class="is-primary" onclick="editPost()">Edit Post</button>
             </div>
         </div>
-    </div>
-    `;
+        `;
+    }
+    else {
+        return `
+        <div class="card m-3">
+            <header class="card-header">
+                <p class="card-header-title">
+                    ${title}
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="content">
+                    ${content}
+                </div>
+            </div>
+        </div>
+        `;
+    }
 }
 
 function getCook(name) {
@@ -45,3 +65,39 @@ function getCook(name) {
     }
     return null;
 };
+
+const editPost = () => {
+    //set the "editPost" modal to active
+    //modal has 2 inputs (for title and content respectively)
+        //input fields should be pre-populated with existing data
+        //user should be able to edit the input fields
+        //user can either save or cancel their edits
+            //push changes to database if user selects "save"
+            //otherwise don't do anything
+    const editPostModal = document.querySelector('#editPostModal');
+    const postRef = firebase.database().ref(`users/${post_userID}/`);
+    postRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const postDetails = data[post_ID];
+        document.querySelector('#editTitleInput').value = postDetails.title;
+        document.querySelector('#editContentInput').value = postDetails.content;
+    });
+    editPostModal.classList.toggle('is-active');
+}
+
+const closeEditModal = () => {
+    const editPostModal = document.querySelector("#editPostModal");
+    editPostModal.classList.toggle("is-active");
+}
+
+const saveEditedPost = () => {
+    const newTitle = document.querySelector("#editTitleInput").value;
+    const newContent = document.querySelector("#editContentInput").value;
+
+    firebase.database().ref(`users/${post_userID}/${post_ID}`)
+        .set({
+            title: newTitle,
+            content: newContent
+        });
+    closeEditModal();
+}
