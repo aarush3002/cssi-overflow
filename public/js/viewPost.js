@@ -198,10 +198,9 @@ const renderComment = (commentKey, comment) => {
                     <div class="card-content">
                         <div class="content"> ${content} </div>
                         <br>
-                        <time><em>Commented on: ${time}</em></time>
+                        <time><em>Commented on: ${time}</em> by <strong>${username}</strong></time>
                     </div>
                     <footer class="card-footer">
-                        <p class="card-footer-item"> ${username} </p>
                         <button class="is-primary" onclick="editComment()">Edit</button>
                     </footer>
                 </div>
@@ -217,11 +216,8 @@ const renderComment = (commentKey, comment) => {
                     <div class="card-content">
                         <div class="content"> ${content} </div>
                         <br>
-                        <time><em>Commented on: ${time}</em></time>
+                        <time><em>Commented on: ${time}</em> by <strong>${username}</strong></time>
                     </div>
-                    <footer class="card-footer">
-                        <p class="card-footer-item"> ${username} </p>
-                    </footer>
                 </div>
             </div>
             <div class="column"></div>
