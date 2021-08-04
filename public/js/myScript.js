@@ -15,7 +15,7 @@ function displayMyPost(post,postKey, userKey) {
     var tag = ``;
     if(post.tags){
         for(let i = 0; i<post.tags.length; i++){
-            tag += `<span class="tag is-danger">${post.tags[i]}</span>`;
+            tag += `<span class="tag is-link is-light mr-3">${post.tags[i]}</span>`;
         }
         
     }
@@ -24,8 +24,8 @@ function displayMyPost(post,postKey, userKey) {
     console.log("Time: ");
     console.log(time);
     return `
-    <div class="card m-3" onclick="openPost(\'${postKey}\',\'${userKey}\')">
-        <header class="card-header">
+    <div class="card m-3 m-3 has-background-light" onclick="openPost(\'${postKey}\',\'${userKey}\')">
+        <header class="card-header has-background-info-light">
             <p class="card-header-title">
                 ${title}
             </p>
