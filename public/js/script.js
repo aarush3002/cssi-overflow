@@ -1,6 +1,7 @@
 let googleUser;
 //export {userID, postID};
 const searchForm = document.querySelector("#filter-form");
+const searchButton = document.querySelector("#tagSearch");
 
 console.log("Home page script loaded");
 function creationTime(epoch) {
@@ -26,8 +27,8 @@ function displayPost(post, postKey, userKey) {
     console.log("Time: ");
     console.log(time);
     return `
-    <div id = "${postKey}" class="card m-3" onclick="openPost(\'${postKey}\',\'${userKey}\')">
-        <header class="card-header">
+    <div id = "${postKey}" class="card m-3 has-background-light" onclick="openPost(\'${postKey}\',\'${userKey}\')">
+        <header class="card-header has-background-info-light">
             <p class="card-header-title">
                 ${title}
             </p>

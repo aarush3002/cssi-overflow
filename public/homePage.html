@@ -40,7 +40,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a href = "#" class ="button is-danger">
+              <a href = "#" class ="button is-link">
                 <strong>Home</strong>
               </a>
               <a href = "myPosts.html" class ="button is-light">
@@ -58,7 +58,14 @@
     <h1 class = "has-text-centered is-size-3">Home Page</h1>
 
     <section>
-        <input id="filter-form" class="input is-primary" type="text" placeholder="Search for a post by tag">
+        <div class="field has-addons is-grouped is-grouped-centered">
+            <div class="control">
+                <input id="filter-form" class="input is-link is-rounded" type="text" placeholder="Search for a post by tag">
+            </div>
+            <div class="control">
+            <a id= "tagSearch" class="button is-link is-rounded">Search</a>
+            </div>
+        </div>
     </section>
     
     <section id="app">
