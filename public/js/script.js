@@ -15,7 +15,7 @@ function displayPost(post, postKey, userKey) {
     var tag = ``;
     if(post.tags){
         for(let i = 0; i<post.tags.length; i++){
-            tag += `<span class="tag is-danger">${post.tags[i]}</span>`;
+            tag += `<span class="tag is-danger mr-3">${post.tags[i]}</span>`;
         }
         
     }
@@ -25,7 +25,7 @@ function displayPost(post, postKey, userKey) {
     console.log("Time: ");
     console.log(time);
     return `
-    <div class="card m-3">
+    <div class="card m-3" onclick="openPost(\'${postKey}\',\'${userKey}\')">
         <header class="card-header">
             <p class="card-header-title">
                 ${title}
@@ -39,10 +39,16 @@ function displayPost(post, postKey, userKey) {
                 <time><em>Post created on: ${time}</em></time>
             </div>
             <div id = "tag-container">${tag}</div>
-            <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
     `;
+}
+
+function openPost(postID, userID) {
+    document.cookie = `userID=${userID};`
+    document.cookie = `postID=${postID};`
+    window.location = "viewPost.html";
+    console.log("Post clicked");
 }
 
 window.onload = (event) => {
