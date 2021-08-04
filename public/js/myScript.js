@@ -30,7 +30,7 @@ function displayMyPost(post,postKey, userKey) {
                 ${title}
             </p>
             <button class="delete" 
-                    onclick = "deleteCard('${postKey}')">
+                onclick = "deleteCard('${postKey}')">
             </button>
         </header>
         <div class="card-content">
