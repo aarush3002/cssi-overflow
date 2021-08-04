@@ -209,7 +209,7 @@ const renderComment = (commentKey, comment) => {
                       <p class="card-footer-item">
                           ${username}
                       </p>
-                      <button class="is-primary" onclick="editComment()">Edit</button>
+                      <button class="is-primary" onclick="editComment('${commentKey}')">Edit</button>
                   </footer>
               </div>
           </div>
@@ -243,4 +243,35 @@ const renderComment = (commentKey, comment) => {
 function creationTime(epoch) {
     const dateObject = new Date(epoch);
     return dateObject.toLocaleString();
+}
+
+function deleteComment(commentKey){
+    if (confirm("Are you sure you want to delete this comment?"))
+    {
+        console.log("deleting comment");
+        firebase.database().ref(`users/${post_userID}/${post_ID}/comments/${commentKey}`).remove();
+    }
+    else {
+        return 0;
+    }
+}
+
+const editComment = () => {
+    const editCommentModal = document.querySelector('#editCommentModal');
+    editCommentModal.classList.toggle('is-active');
+}
+
+const closeEditCommentModal = () => {
+    const editCommentModal = document.querySelector("#editCommentModal");
+    editCommentModal.classList.toggle("is-active");
+}
+
+const saveEditedComment = () => {
+    const commentContent = document.querySelector("#commentInput").value;
+    firebase.database().ref(`users/${post_userID}/${post_ID}/comments`).push({
+        commentUser: userObj.displayName,
+        commentText: commentContent,
+        timestamp: Date.now()
+    });
+    closeCommentModal();
 }
