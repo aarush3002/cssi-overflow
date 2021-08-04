@@ -24,7 +24,7 @@ function displayMyPost(post,postKey, userKey) {
     console.log("Time: ");
     console.log(time);
     return `
-    <div class="card m-3">
+    <div class="card m-3" onclick="openPost(\'${postKey}\',\'${userKey}\')">
         <header class="card-header">
             <p class="card-header-title">
                 ${title}
@@ -40,10 +40,16 @@ function displayMyPost(post,postKey, userKey) {
                 <time>${time}</time>
             </div>
             <div id = "tag-container">${tag}</div>
-            <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
         </div>
     </div>
     `;
+}
+
+function openPost(postID, userID) {
+    console.log("Post clicked");
+    document.cookie = `userID=${userID};`
+    document.cookie = `postID=${postID};`
+    window.location = "viewPost.html";
 }
 
 window.onload = (event) => {

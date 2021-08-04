@@ -13,6 +13,7 @@ window.onload = () => {
     postRef.on('value', (snapshot) => {
         const data = snapshot.val();
         document.querySelector("#app").innerHTML = displayPost(data, post_ID, post_userID);
+        document.querySelector("#postTitle").innerHTML = data["title"];
     });
 
     firebase.auth()
@@ -24,6 +25,7 @@ window.onload = () => {
                 window.location = 'index.html';
             }
         });
+        
     getComments();
 };
 
@@ -53,36 +55,42 @@ function displayPost(post, postKey, userKey) {
     if (getCook('curr_userID') === getCook('userID'))
     {
         return `
-        <div class="card m-3">
-            <header class="card-header">
-                <p class="card-header-title">
-                    ${title}
-                </p>
-            </header>
-            <div class="card-content">
-                <div class="content">
-                    ${content}
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <div class="card m-3"> 
+                    <div class="card-content">
+                        <div class="content">
+                            ${content}
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a href="#" onclick="addComment()" class="card-footer-item">Comment</a>
+                        <a href="#" onclick="editPost()" class="card-footer-item">Edit Post</a>
+                    </footer>
                 </div>
-                <button class="is-primary" onclick="addComment()">Comment</button>                
-                <button class="is-primary" onclick="editPost()">Edit Post</button>
             </div>
+            <div class="column"></div>
         </div>
         `;
     }
     else {
         return `
-        <div class="card m-3">
-            <header class="card-header">
-                <p class="card-header-title">
-                    ${title}
-                </p>
-            </header>
-            <div class="card-content">
-                <div class="content">
-                    ${content}
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <div class="card m-3">
+                    <div class="card-content">
+                        <div class="content">
+                            ${content}
+                        </div>
+                    </div>    
+                    <footer class="card-footer">
+                        <a href="#" onclick="addComment()" class="card-footer-item">Comment</a>
+                    </footer>
                 </div>
-                <button class="is-primary" onclick="addComment()">Comment</button>
             </div>
+            <div class="column"></div>
         </div>
         `;
     }
@@ -168,16 +176,22 @@ const saveComment = () => {
 
 const renderComment = (username, content) => {
     return `
-    <div class="card m-3">
-        <div class="card-content">
-            <div class="content">
-                ${content}
+    <div class="columns">
+        <div class="column"></div>
+        <div class="column is-four-fifths">
+            <div class="card m-3">
+                <div class="card-content">
+                    <div class="content">
+                        ${content}
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <p class="card-footer-item">
+                        ${username}
+                    </p>
+                </footer>
             </div>
         </div>
-        <footer class="card-footer">
-            <p class="card-footer-item">
-                ${username}
-            </p>
-        </header>
+        <div class="column"></div>
     </div>`
 }
