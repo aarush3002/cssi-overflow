@@ -37,7 +37,8 @@ function displayMyPost(post,postKey, userKey) {
             <div class="content">
                 ${content}
                 <br>
-                <time>${time}</time>
+                <br>
+                <time><em>Post created on: ${time}</em></time>
             </div>
             <div id = "tag-container">${tag}</div>
             <button class="is-primary" onclick="viewPost(\'${postKey}\',\'${userKey}\')">View Post</button>
