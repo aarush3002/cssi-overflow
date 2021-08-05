@@ -65,6 +65,7 @@ window.onload = (event) => {
     });
 }
 
+searchForm.addEventListener('keyup', e => hideUnfilteredCards(e.target.value));
 searchButton.addEventListener('click', e => hideUnfilteredCards(searchForm.value));
 
 const getNotes = (userId) => {
