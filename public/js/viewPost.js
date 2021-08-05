@@ -32,8 +32,6 @@ function upvotePost() {
 }
 
 window.onload = () => {
-    
-
     firebase.auth()
         .onAuthStateChanged(user => {
             if (user) {
@@ -45,8 +43,8 @@ window.onload = () => {
                     postObj = data;
                     document.querySelector("#app").innerHTML = displayPost(data, post_ID, post_userID);
                     document.querySelector("#postTitle").innerHTML = data["title"];
+                    getComments();
                 });
-                getComments();
             }
             else {
                 window.location = 'index.html';
@@ -62,12 +60,16 @@ const getComments = () => {
     console.log("get ref to database");
     const comments = snapshot.val();
     let commentsGUI = ``;
-    for(const commentKey in comments) {
-        console.log(commentKey);
+    for(const commentKey in comments) {        
         commentsGUI += renderComment(commentKey, comments[commentKey]);
     }
-    // Inject our string of HTML into our viewNotes.html page
     document.querySelector('#comments').innerHTML = commentsGUI;
+    // Inject our string of HTML into our viewNotes.html page
+    for (const commentKey in comments) {
+        if (comments[commentKey].edited === 1) {
+            document.querySelector(`#${commentKey}`).innerHTML += `<br><em>Last edited on: ${creationTime(comments[commentKey].editedTimestamp)}</em>`
+        }
+    }
     });
 };
 
@@ -76,6 +78,7 @@ function displayPost(post, postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var upvote = post["upvote"];
+    const username = post["username"]; //=post user display name
     if (upvote == null) {
         upvote = 0;
     }
@@ -85,62 +88,65 @@ function displayPost(post, postKey, userKey) {
     {
         return `
         <div class="columns">
-	<div class="column"></div>
-    <div class="column is-four-fifths">
-    
-				<div class="card m-3">
-		<div class="columns">
-            <div class="column is-1 has-text-centered"> 
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU"/>
-				<p>${upvote}</p>
-			</div>
-			<div class="column">
-					<div class="card-content">
-						<div class="content"> ${content}
-							<br>
-							<br>
-							<time><em>Post created on: ${time}</em></time>
-						</div>
-					</div>
-                    <footer class="card-footer"> 
-                        <a href="#" onclick="addComment()" class="card-footer-item">Comment</a>
-			        	<a href="#" onclick="editPost()" class="card-footer-item">Edit Post</a>
-                    </footer>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="column"></div>
-</div>
-        `;
+            <div class="column"></div>
+                <div class="column is-four-fifths">            
+                    <div class="card m-3"> 
+                        <div class="columns">
+                            <div class="column is-1 has-text-centered"> 
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU"/>
+                                <p>${upvote}</p>
+                            </div>
+                            <div class="column">
+                                <div class="card-content">
+                                    <div class="content">
+                                      ${content}
+                                      <br>
+                                      <br>
+                                      <time><em>Post created on: ${time}</em> by <strong>${username}</strong></time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" onclick="addComment()" class="card-footer-item">Comment</a>
+                            <a href="#" onclick="editPost()" class="card-footer-item">Edit Post</a>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+	          <div class="column"></div>
+        </div>`;
     }
     else {
         return `
         <div class="columns">
-	<div class="column"></div>
-    <div class="column is-four-fifths">
-    
-				<div class="card m-3">
-		<div class="columns">
-            <div class="column is-1 has-text-centered"> 
-            <img onclick="upvotePost()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU"/>
-				<p>${upvote}</p>
-			</div>
-			<div class="column">
-					<div class="card-content">
-						<div class="content"> ${content}
-							<br>
-							<br>
-							<time><em>Post created on: ${time}</em></time>
-						</div>
-					</div>
-					<footer class="card-footer"> <a href="#" onclick="addComment()" class="card-footer-item">Comment</a> </footer>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="column"></div>
-</div>
+	          <div class="column"></div>
+                <div class="column is-four-fifths">
+                    <div class="card m-3">
+		                    <div class="columns">
+                            <div class="column is-1 has-text-centered"> 
+                                <img onclick="upvotePost()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU"/>
+				                        <p>${upvote}</p>
+			                      </div>
+			                      <div class="column">
+					                      <div class="card-content">
+                                    <div class="content"> 
+                                        ${content}
+                                        <br>
+                                        <br>
+                                        <time><em>Post created on: ${time}</em> by <strong>${username}</strong></time>
+                                    </div>
+					                      </div>
+                             </div>
+                          </div>
+					                <footer class="card-footer"> 
+                              <a href="#" onclick="addComment()" class="card-footer-item">Comment</a> 
+                          </footer>
+                        </div>
+			              </div>
+		            </div>
+	              <div class="column"></div>
+           </div>
         `;
     }
 }
@@ -189,7 +195,7 @@ const saveEditedPost = () => {
             title: newTitle,
             content: newContent
         });
-    getComments();
+    //getComments();
     closeEditModal();
 }
 
@@ -228,36 +234,34 @@ const renderComment = (commentKey, comment) => {
     const content = comment.commentText;
     const username = comment.commentUser;
     const time = creationTime(comment.timestamp);
-    console.log(userObj.displayName);
-    console.log(username);
+    
     if (userObj.displayName === username) {
         return `
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div class="card m-3">
-                    <header class="card-header">
-                        <button class="delete" onclick="deleteComment('${commentKey}')"> </button>
-                    </header>
-                    <div class="card-content">
+                    <div id="${commentKey}" class="card-content">
                         <div class="content"> ${content} </div>
                         <br>
                         <time><em>Commented on: ${time}</em> by <strong>${username}</strong></time>
                     </div>
                     <footer class="card-footer">
-                        <button class="is-primary" onclick="editComment()">Edit</button>
+                        <a href="#" onclick="editComment('${commentKey}')" class="card-footer-item">Edit</a>
+                        <a href="#" onclick="deleteComment('${commentKey}')" class="card-footer-item">Delete</a>
                     </footer>
                 </div>
             </div>
             <div class="column"></div>
-        </div>`
-    } else {
+        </div>`;
+    }
+    else {
         return `
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div class="card m-3">
-                    <div class="card-content">
+                    <div id="${commentKey}" class="card-content">
                         <div class="content"> ${content} </div>
                         <br>
                         <time><em>Commented on: ${time}</em> by <strong>${username}</strong></time>
@@ -285,9 +289,18 @@ function deleteComment(commentKey){
     }
 }
 
-const editComment = () => {
+let selectedCommentKey;
+
+const editComment = (commentKey) => {
+    selectedCommentKey = commentKey;
     const editCommentModal = document.querySelector('#editCommentModal');
     editCommentModal.classList.toggle('is-active');
+    const commentRef = firebase.database().ref(`users/${post_userID}/${post_ID}/comments`);
+    commentRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const commentDetails = data[commentKey];
+        document.querySelector('#editCommentInput').value = commentDetails.commentText;
+    });
 }
 
 const closeEditCommentModal = () => {
@@ -296,11 +309,13 @@ const closeEditCommentModal = () => {
 }
 
 const saveEditedComment = () => {
-    const commentContent = document.querySelector("#commentInput").value;
-    firebase.database().ref(`users/${post_userID}/${post_ID}/comments`).push({
-        commentUser: userObj.displayName,
-        commentText: commentContent,
-        timestamp: Date.now()
-    });
-    closeCommentModal();
+    const newCommentText = document.querySelector("#editCommentInput").value;
+    console.log(selectedCommentKey, post_ID, post_userID);
+    firebase.database().ref(`users/${post_userID}/${post_ID}/comments/${selectedCommentKey}`)
+        .update({
+            commentText: newCommentText,
+            edited: 1,
+            editedTimestamp: Date.now()
+        });
+    closeEditCommentModal();
 }

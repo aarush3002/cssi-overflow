@@ -56,6 +56,22 @@
             </footer>
         </div>
     </div>
+
+    <!--edit comment Modal-->
+    <div id="editCommentModal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <input class="input is-normal" id="editCommentInput" type="text">
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" onclick="saveEditedComment()">
+                    Save Comment Changes
+                </button>
+                <button class="button" onclick="closeEditCommentModal()">Cancel</button>
+            </footer>
+        </div>
+    </div>
     <!-- NAV BAR -->
     <nav
       class="navbar has-shadow is-light mb-3"
