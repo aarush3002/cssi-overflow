@@ -14,6 +14,7 @@ function displayPost(post, postKey, userKey) {
     console.log(post);
     var title = post["title"];
     var content = post["content"].substring(0, 100) + "...";
+    var username = post["username"]
     var tag = ``;
     if(post.tags){
         for(let i = 0; i<post.tags.length; i++){
@@ -38,7 +39,7 @@ function displayPost(post, postKey, userKey) {
                 ${content}
                 <br>
                 <br>
-                <time><em>Post created on: ${time}</em></time>
+                <time><em>Post created on: ${time}</em> by <strong>${username}</strong></time>
             </div>
             <div id = "tag-container">${tag}</div>
         </div>
