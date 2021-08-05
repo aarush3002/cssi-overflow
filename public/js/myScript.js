@@ -24,16 +24,16 @@ function displayMyPost(post,postKey, userKey) {
     console.log("Time: ");
     console.log(time);
     return `
-    <div class="card m-3 m-3 has-background-light" onclick="openPost(\'${postKey}\',\'${userKey}\')">
+    <div class="card m-3 m-3 has-background-light">
         <header class="card-header has-background-info-light">
-            <p class="card-header-title">
+            <p class="card-header-title"  onclick="openPost(\'${postKey}\',\'${userKey}\')">
                 ${title}
             </p>
             <button class="delete" 
                 onclick = "deleteCard('${postKey}')">
             </button>
         </header>
-        <div class="card-content">
+        <div class="card-content"  onclick="openPost(\'${postKey}\',\'${userKey}\')">
             <div class="content">
                 ${content}
                 <br>
@@ -91,9 +91,6 @@ function deleteCard(postKey){
     {
         console.log("deleting post");
         firebase.database().ref(`users/${googleUser.uid}/${postKey}`).remove();
-    }
-    else {
-        return 0;
     }
 }
 
