@@ -92,7 +92,7 @@ function displayPost(post, postKey, userKey) {
             <div class="column is-four-fifths">
                 <div class="card m-3">
                     <div class="columns">
-                        <div class="column is-1 has-text-centered"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU" />
+                        <div class="column is-1 has-text-centered"> <img onclick="upvotePost()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU" />
                             <p>${upvote}</p>
                         </div>
                         <div class="column">
