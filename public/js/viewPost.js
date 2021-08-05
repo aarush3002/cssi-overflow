@@ -118,35 +118,29 @@ function displayPost(post, postKey, userKey) {
         </div>`;
     }
     else {
-        return `
-        <div class="columns">
-	          <div class="column"></div>
-                <div class="column is-four-fifths">
-                    <div class="card m-3">
-		                    <div class="columns">
-                            <div class="column is-1 has-text-centered"> 
-                                <img onclick="upvotePost()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU"/>
-				                        <p>${upvote}</p>
-			                      </div>
-			                      <div class="column">
-					                      <div class="card-content">
-                                    <div class="content"> 
-                                        ${content}
-                                        <br>
-                                        <br>
-                                        <time><em>Post created on: ${time}</em> by <strong>${username}</strong></time>
+        return `<div class="columns">
+                    <div class="column"></div>
+                    <div class="column is-four-fifths">
+                        <div class="card m-3">
+                            <div class="columns">
+                                <div class="column is-1 has-text-centered"> <img onclick="upvotePost()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNlkxjYSDJ1bu-6M-q8RqojHs4kPegLxZP6w&usqp=CAU" />
+                                    <p>${upvote}</p>
+                                </div>
+                                <div class="column">
+                                    <div class="card-content">
+                                        <div class="content"> ${content}
+                                            <br>
+                                            <br>
+                                            <time><em>Post created on: ${time}</em> by <strong>${username}</strong></time>
+                                        </div>
                                     </div>
-					                      </div>
-                             </div>
-                          </div>
-					                <footer class="card-footer"> 
-                              <a href="#" onclick="addComment()" class="card-footer-item">Comment</a> 
-                          </footer>
+                                </div>
+                            </div>
+                            <footer class="card-footer"> <a href="#" onclick="addComment()" class="card-footer-item">Comment</a> </footer>
                         </div>
-			              </div>
-		            </div>
-	              <div class="column"></div>
-           </div>
+                    </div>
+                <div class="column"></div>
+                </div>
         `;
     }
 }
