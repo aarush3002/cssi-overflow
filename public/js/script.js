@@ -65,7 +65,7 @@ window.onload = (event) => {
     });
 }
 
-searchForm.addEventListener('keyup', e => hideUnfilteredCards(e.target.value));
+searchButton.addEventListener('click', e => hideUnfilteredCards(searchForm.value));
 
 const getNotes = (userId) => {
   const notesRef = firebase.database().ref(`users`).orderByChild('timestamp').limitToLast(100);
@@ -121,7 +121,7 @@ function hideUnfilteredCards(searchTerm) {
                 // Check if search term matches some (one or more) of the tags. If any matches, it returns true
                 if(post.tags != null){
                     console.log(post.title);
-                    foundTagMatch = post.tags.includes(searchTerm);
+                    foundTagMatch = post.tags.some(t => searchRe.test(t));
                 }
                 if (searchTerm === "" || foundTitleMatch || foundTagMatch) {
                     document.getElementById(postKey).classList.remove("hidden");
