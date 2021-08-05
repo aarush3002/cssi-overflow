@@ -18,6 +18,7 @@ function createPost() {
             content: content,
             timestamp: Date.now(),
             tags: tagArray,
+            username: googleUser.displayName
         }).then(() => {
             console.log("change page");
             window.location = 'myPosts.html';
@@ -29,7 +30,6 @@ function createPost() {
 
         console.log("created post");
     }
-    //; //TODO: Go to 'my posts' page
 
     document.querySelector("#progressBar").classList.add("hidden");
 }
@@ -52,7 +52,7 @@ tagForm.addEventListener('keypress', e => {
             return;
         }
         const newTagElement = document.createElement("span");
-        newTagElement.classList.add("new-tag", "tag", "is-danger");
+        newTagElement.classList.add("new-tag", "tag", "is-link","is-light", "mr-3");
         newTagElement.textContent = tagValue;
         const tagDeleteButton = document.createElement("button");
         tagDeleteButton.classList.add("delete");
